@@ -11,12 +11,15 @@ from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 import PIL  # added by Aashish for rotating GIFs
 import io   # added by Aashish for rotating GIFs
 
-def read_cube(path, clip=None, rmin=None, rmax=None, N=None, vmin=None, vmax=None, dv=None, vunit_per_s=None):
+def read_cube(path, clip=None, rmin=None, rmax=None, N=None, vmin=None, vmax=None, dv=None, vunit_per_s=None, offset=None, x_off=None, y_off=None):
     # Read in the FITS data.
     cube = imagecube(path)
     cube.data = cube.data.astype(float)
     if vunit_per_s == 'km':  # added by me
         cube.velax = cube.velax*1e3
+    if offset=True:
+        cube.xaxis += x_off
+        cube.yaxis += y_off
 
     # Crop the data along the velocity axis, implemented from gofish
     vmin = cube.velax[0] if vmin is None else vmin*1.0e3
