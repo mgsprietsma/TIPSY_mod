@@ -20,6 +20,9 @@ def read_cube(path, clip=None, rmin=None, rmax=None, N=None, vmin=None, vmax=Non
     if offset=True:
         cube.xaxis += x_off
         cube.yaxis += y_off
+    else:
+        x_off = 0
+        y_off = 0
 
     # Crop the data along the velocity axis, implemented from gofish
     vmin = cube.velax[0] if vmin is None else vmin*1.0e3
@@ -163,7 +166,7 @@ def make_ppv(path, clip=3., rmin=None, rmax=None, N=None, cmin=None, cmax=None, 
  
     vmin0 = vmin
     vmax0 = vmax
-    cube, x, y, v, vmin, vmax, i = read_cube(path, clip=clip, rmin=rmin, rmax=rmax, N=N, vmin=vmin0, vmax=vmax0, dv=dv, vunit_per_s=vunit_per_s)
+    cube, x, y, v, vmin, vmax, i = read_cube(path, clip=clip, rmin=rmin, rmax=rmax, N=N, vmin=vmin0, vmax=vmax0, dv=dv, vunit_per_s=vunit_per_s, offset=offset, x_off=x_off, y_off=y_off)
     
     # Determine the opacity of the data points.
     cuts = np.linspace(0, 1, ntrace+1)
@@ -218,7 +221,7 @@ def make_ppv(path, clip=3., rmin=None, rmax=None, N=None, cmin=None, cmax=None, 
     ## Plotting data from another cube
     data2 = []
     if path2 is not None:
-        cube2, x2, y2, v2, vmin2, vmax2, i2 = read_cube(path2, clip=clip2, rmin=rmin, rmax=rmax, N=N, vmin=vmin0, vmax=vmax0, dv=dv, vunit_per_s=vunit_per_s)
+        cube2, x2, y2, v2, vmin2, vmax2, i2 = read_cube(path2, clip=clip2, rmin=rmin, rmax=rmax, N=N, vmin=vmin0, vmax=vmax0, dv=dv, vunit_per_s=vunit_per_s, offset=offset, x_off=x_off, y_off=y_off)
         for a, alpha in enumerate(opacity):
             mask = np.logical_and(i2 >= cuts[a], i2 < cuts[a+1])
             if marker_color2 is None:
